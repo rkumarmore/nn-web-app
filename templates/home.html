@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning</title>
+  </head>
+  <body>
+    <h1> Deep Learning Neural Newtwork Web App</h1>
+    <p> 
+        Upload file: 
+        <form action = "/upload" method = "POST" enctype = "multipart/form-data">
+         <input type = "file" name = "file" />
+         <input id="uploadButton" type = "submit" disabled/>
+      </form>
+
+    </p>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+       $(document).ready(function(){
+        $('INPUT[type="file"]').change(function () {
+              var ext = this.value.match(/\.(.+)$/)[1];
+              var formats = ["csv", "xlsx", "xls"];
+                if(formats.indexOf(ext) !== -1){
+                  $('#uploadButton').attr('disabled', false);
+                } else{
+                  alert('Only csv, xlsx and xls file types are allowed.');
+                  this.value = '';
+                }              
+          })
+        });
+  </script>
+</html>

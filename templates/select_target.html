@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Deep Learning</title>
+  </head>
+  <body>
+    <h1> Deep Learning Neural Newtwork Web App</h1>
+    <p> 
+        Upload file: 
+        <form action = "/set_target_column" method = "POST" >
+         <select name="target_variable" id="">
+            {%for column in request.file_headers%}
+                <option>{{column}}</option>
+            {%endfor%}
+         </select>
+         <input id="" type = "submit"/>
+      </form>
+
+    </p>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+       $(document).ready(function(){
+
+        });
+  </script>
+</html>
