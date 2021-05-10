@@ -25,8 +25,9 @@ def upload():
       session['filename'] = secure_filename(f.filename)
       f.save(session['filename'])
       data = pd.read_csv(session['filename'])
-      print(data.columns)
-      return render_template("select_target.html", file_headers=data.head()) 
+      file_headers = list(data.columns.values)
+      print(file_headers)
+      return render_template("select_target.html", file_headers=file_headers) 
     else:
         return 'You are not allowed to do this task'
 
