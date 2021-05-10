@@ -24,7 +24,7 @@ def home():
         session.pop('trained_regression')
     if('trained_classification' in session):
         session.pop('trained_classification')
-    return render_template("home.html")
+    return render_template("index.html")
 
 
 @app.route("/upload", methods = ['GET', 'POST'])
