@@ -16,14 +16,14 @@ Classification = Classification()
 
 @app.route("/")
 def home():
-    if(session['filename']):
-        session['filename'] = session.pop('filename')
-    if(session['target_variable']): 
-        session['target_variable'] = session.pop('target_variable')
-    if(session['trained_regression']):
-        session['trained_regression'] = session.pop('trained_regression')
-    if(session['trained_classification']):
-        session['trained_classification'] = session.pop('trained_classification')
+    if('filename' in session):
+        session.pop('filename')
+    if('target_variable' in session): 
+        session.pop('target_variable')
+    if('trained_regression' in session):
+        session.pop('trained_regression')
+    if('trained_classification' in session):
+        session.pop('trained_classification')
     return render_template("home.html")
 
 
@@ -53,7 +53,7 @@ def set_target_column():
 @app.route("/run_model", methods = ['GET', 'POST'])
 def run_model():
     print(session)
-    if(session['filename'] == False or session['filename'] == None or session['target_variable'] == None):
+    if('filename' not in session or 'target_variable' not in session):
         return  redirect(url_for('home'))
     return  render_template("select_method.html", status='success')
     
