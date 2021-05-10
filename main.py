@@ -1,5 +1,4 @@
-from flask import Flask, render_template, session 
-from flask import request
+from flask import Flask, render_template, session, redirect, url_for, request, flash
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 
@@ -17,6 +16,14 @@ Classification = Classification()
 
 @app.route("/")
 def home():
+    if(session['filename']):
+        session['filename'] = session.pop('filename')
+    if(session['target_variable']): 
+        session['target_variable'] = session.pop('target_variable')
+    if(session['trained_regression']):
+        session['trained_regression'] = session.pop('trained_regression')
+    if(session['trained_classification']):
+        session['trained_classification'] = session.pop('trained_classification')
     return render_template("home.html")
 
 
@@ -38,10 +45,18 @@ def set_target_column():
     if request.method == 'POST':
         session['target_variable'] = request.form['target_variable']
         # Run preprocessing process
-        return render_template("select_method.html", status='success')
+        flash(session['target_variable']+' selected as target variable. Please select method to train')
+        return redirect(url_for('run_model'))
     else:
         return 'You are not allowed to do this task'
 
+@app.route("/run_model", methods = ['GET', 'POST'])
+def run_model():
+    print(session)
+    if(session['filename'] == False or session['filename'] == None or session['target_variable'] == None):
+        return  redirect(url_for('home'))
+    return  render_template("select_method.html", status='success')
+    
 @app.route("/train_regression", methods = ['GET', 'POST'])
 def train_regression():
     if request.method == 'POST':
@@ -49,7 +64,9 @@ def train_regression():
         target_variable = session['target_variable']
         history = Regression.train(filename, target_variable)
         print(history)
-        return  render_template("select_method.html", status='success')
+        session['trained_regression'] = True
+        flash('Regression training has been finished')
+        return  redirect(url_for('run_model'))
     else:
         return 'failed'
 
@@ -57,7 +74,8 @@ def train_regression():
 def pickle_regression():
     if request.method == 'POST':       
         status = Regression.pickle() 
-        return  render_template("select_method.html", status='success')
+        flash('Regression model has been pickled')
+        return  redirect(url_for('run_model'))
     else:
         return 'failed'
 
@@ -68,6 +86,8 @@ def train_classification():
         target_variable = session['target_variable']
         history = Classification.train(filename, target_variable)
         print(history)
+        session['trained_classification'] = True
+        flash('Classification training has been finished')
         return  render_template("select_method.html", status='success')
     else:
         return 'failed'
@@ -76,6 +96,7 @@ def train_classification():
 def pickle_classification():
     if request.method == 'POST':       
         status = Classification.pickle() 
+        flash('Classification model has been pickled')
         return  render_template("select_method.html", status='success')
     else:
         return 'failed'

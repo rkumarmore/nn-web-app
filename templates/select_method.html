@@ -6,32 +6,45 @@
   </head>
   <body>
     <h1> Deep Learning Neural Newtwork Web App</h1>
+    <p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </p>
+    <p>File Uploaded: {{session.filename}} <br>
+        Target Variable: {{session.target_variable}} <br> </p>
     <p> 
         Neural Network Regressor: <br>
-            Regression : 
+            Regression :                
 
         <form action = "/train_regression" method = "POST" >
          <input type="hidden" name="train_regression"> <input id="" value = "train" type='submit' />
         </form>
-
+        {% if session.trained_regression  %}
         <form action = "/pickle_regression" method = "POST" >
             <input type="hidden" name="pickle_regression"> <input id="" value = "pickle " type='submit'/>
         </form>
+        {% endif %}
+        
 
     </p>
     <p> 
         Neural Network Classifier: <br>
             Classification : 
-
         <form action = "/train_classification" method = "POST" >
          <input type="hidden" name="train_classification"> <input id="" value = "train" type='submit' />
         </form>
-
+        {% if session.trained_classification %} 
         <form action = "/pickle_classification" method = "POST" >
             <input type="hidden" name="pickle_classification"> <input id="" value = "pickle " type='submit'/>
         </form>
-
+        {% endif %}
     </p>
+    <p><a href="/">Upload new file</a></p>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
