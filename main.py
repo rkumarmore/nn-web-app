@@ -14,6 +14,18 @@ app.secret_key = '\xf9\xde\xd9\xa6\n\xc83\x85\xe4\x80"\xf9~\x169bk\xe3GZ=\xde\xb
 Regression = Regression()
 Classification = Classification()
 
+@app.route("/seedling-classifier")
+def seedlings():
+    if('filename' in session):
+        session.pop('filename')
+    if('target_variable' in session): 
+        session.pop('target_variable')
+    if('trained_regression' in session):
+        session.pop('trained_regression')
+    if('trained_classification' in session):
+        session.pop('trained_classification')
+    return render_template("index.html")
+
 @app.route("/")
 def home():
     if('filename' in session):
